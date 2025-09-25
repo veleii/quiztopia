@@ -1,14 +1,34 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: velei
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: quiztopia
 
 provider:
   name: aws
   runtime: nodejs20.x
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
+  region: eu-north-1
+  environment:
+    DYNAMODB_TABLE: quiztopia
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/quiztopia"
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "*"
 
 functions:
   hello:
@@ -17,3 +37,21 @@ functions:
       - httpApi:
           path: /
           method: get
+
+resources:
+  Resources:
+    QuiztopiaTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: quiztopia
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
