@@ -39,6 +39,13 @@ functions:
           path: /auth/signup
           method: post
 
+  testAuth:
+    handler: auth/testAuth.handler
+    events:
+      - httpApi:
+          path: /auth/test
+          method: get
+
   login:
     handler: auth/login.handler
     events:
