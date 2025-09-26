@@ -18,7 +18,7 @@ provider:
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
           Resource:
-            - "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/quiztopia"
+            - "arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/quiztopia"
         - Effect: Allow
           Action:
             - logs:CreateLogGroup
@@ -31,12 +31,54 @@ provider:
           Resource: "*"
 
 functions:
-  hello:
-    handler: handler.hello
+  signup:
+    handler: auth/signup.handler
     events:
       - httpApi:
-          path: /
+          path: /auth/signup
+          method: post
+
+  login:
+    handler: auth/login.handler
+    events:
+      - httpApi:
+          path: /auth/login
+          method: post
+
+  getAllQuizzes:
+    handler: functions/quiz/getAllQuizzes.handler
+    events:
+      - httpApi:
+          path: /quiz
           method: get
+
+  createQuiz:
+    handler: functions/quiz/createQuiz.handler
+    events:
+      - httpApi:
+          path: /quiz
+          method: post
+
+  addQuestion:
+    handler: functions/quiz/addQuestion.handler
+    events:
+      - httpApi:
+          path: /quiz/question
+          method: post
+
+  getQuizById:
+    handler: functions/quiz/getQuizById.handler
+    events:
+      - httpApi:
+          path: /quiz/{userId}/{quizId}
+          method: get
+
+  deleteQuiz:
+    handler: functions/quiz/deleteQuiz.handler
+    events:
+      - httpApi:
+          path: /quiz/{quizId}
+          method: delete
 
 resources:
   Resources:

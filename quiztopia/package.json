@@ -1,0 +1,19 @@
+{
+  "name": "quiztopia",
+  "version": "1.0.0",
+  "description": "Quiztopia AWS Lambda projekt",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.896.0",
+    "@middy/core": "^6.4.5",
+    "@middy/http-json-body-parser": "^6.4.5",
+    "@middy/validator": "^6.4.5",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^13.0.0"
+  }
+}
