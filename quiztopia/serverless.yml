@@ -6,6 +6,7 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   environment:
+    JWT_SECRET: hemlis
     DYNAMODB_TABLE: quiztopia
   iam:
     role:

@@ -6,7 +6,7 @@ import { sendResponse } from "../services/response.js";
 import middy from "@middy/core";
 import httpJsonBodyParser from "@middy/http-json-body-parser";
 
-const JWT_SECRET = process.env.JWT_SECRET || "hemlis";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 async function baseHandler(event) {
   try {
@@ -37,11 +37,18 @@ async function baseHandler(event) {
       return sendResponse(401, { error: "Wrong password or email" });
     }
 
+    console.log("LOGIN has JWT_SECRET:", Boolean(process.env.JWT_SECRET));
+    console.log("LOGIN payload:", {
+      userId: user.userId?.S ?? user.pk?.S,
+      email: user.email?.S,
+    });
+
     const token = jwt.sign(
-      { userId: user.pk.S, email: user.email.S },
-      JWT_SECRET,
+      { userId: user.userId?.S ?? user.pk?.S, email: user.email.S },
+      process.env.JWT_SECRET, // du sa att du kör utan fallback, bra!
       { expiresIn: "1h" }
     );
+
     return sendResponse(200, { message: "Logged in", token });
   } catch (err) {
     console.error(err);

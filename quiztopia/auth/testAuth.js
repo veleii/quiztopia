@@ -11,6 +11,4 @@ async function baseHandler(event) {
   });
 }
 
-export const handler = middy(baseHandler)
-  .use(httpJsonBodyParser())
-  .use(authMiddleware());
+export const handler = middy(baseHandler).use(authMiddleware());

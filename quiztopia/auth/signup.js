@@ -22,6 +22,7 @@ async function baseHandler(event) {
       Item: {
         pk: { S: `USER#${userId}` },
         sk: { S: `PROFILE#${email}` },
+        userId: { S: userId },
         email: { S: email },
         password: { S: hashedPassword },
       },
