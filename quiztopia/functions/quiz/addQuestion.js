@@ -18,7 +18,6 @@ async function baseHandler(event) {
       });
     }
 
-    // 1. Hämta quizet
     const getParams = new GetItemCommand({
       TableName: process.env.DYNAMODB_TABLE,
       Key: {
@@ -33,14 +32,12 @@ async function baseHandler(event) {
       return sendResponse(404, { error: "Quiz not found" });
     }
 
-    // 2. Kontrollera att användaren äger quizet
     if (result.Item.userId.S !== user.userId) {
       return sendResponse(403, {
         error: "Not authorized to add question to this quiz",
       });
     }
 
-    // 3. Skapa frågan
     const questionId = uuidv4();
     const createdAt = new Date().toISOString();
 
