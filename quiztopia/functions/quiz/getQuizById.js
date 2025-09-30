@@ -11,7 +11,6 @@ async function baseHandler(event) {
       return sendResponse(400, { success: false, error: "quizId is required" });
     }
 
-    // 1. Hämta själva quizet
     const getParams = new GetItemCommand({
       TableName: process.env.DYNAMODB_TABLE,
       Key: {
@@ -32,7 +31,6 @@ async function baseHandler(event) {
       title: quizResult.Item.title.S,
     };
 
-    // 2. Hämta alla frågor till quizet
     const queryParams = new QueryCommand({
       TableName: process.env.DYNAMODB_TABLE,
       KeyConditionExpression: "pk = :pk",

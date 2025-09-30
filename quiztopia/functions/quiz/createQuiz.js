@@ -9,7 +9,7 @@ import { authMiddleware } from "../../services/authMiddleware.js";
 async function baseHandler(event) {
   try {
     const { title } = event.body || {};
-    const user = event.user; // från authMiddleware
+    const user = event.user;
 
     if (!title) {
       return sendResponse(400, { error: "Title is required" });
@@ -21,8 +21,8 @@ async function baseHandler(event) {
     const params = new PutItemCommand({
       TableName: process.env.DYNAMODB_TABLE,
       Item: {
-        pk: { S: `QUIZ` }, // partition key
-        sk: { S: `QUIZ#${quizId}` }, // sort key
+        pk: { S: `QUIZ` },
+        sk: { S: `QUIZ#${quizId}` },
         quizId: { S: quizId },
         userId: { S: user.userId },
         title: { S: title },
@@ -45,5 +45,5 @@ async function baseHandler(event) {
 }
 
 export const handler = middy(baseHandler)
-  .use(httpJsonBodyParser()) // för att läsa JSON-body
-  .use(authMiddleware()); // kräver login
+  .use(httpJsonBodyParser())
+  .use(authMiddleware());

@@ -13,11 +13,9 @@ async function baseHandler(event) {
       return sendResponse(400, { error: "quizId is required" });
     }
 
-    // 1. Hämta quizet
     const getParams = new GetItemCommand({
       TableName: process.env.DYNAMODB_TABLE,
       Key: {
-        // <-- stort K här!
         pk: { S: "QUIZ" },
         sk: { S: `QUIZ#${quizId}` },
       },
@@ -29,16 +27,13 @@ async function baseHandler(event) {
       return sendResponse(404, { error: "Quiz not found" });
     }
 
-    // 2. Kolla att användaren äger quizet
     if (result.Item.userId.S !== user.userId) {
       return sendResponse(403, { error: "Not authorized to delete this quiz" });
     }
 
-    // 3. Ta bort quizet
     const deleteParams = new DeleteItemCommand({
       TableName: process.env.DYNAMODB_TABLE,
       Key: {
-        // <-- stort K här också!
         pk: { S: "QUIZ" },
         sk: { S: `QUIZ#${quizId}` },
       },
