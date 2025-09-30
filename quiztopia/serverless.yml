@@ -79,7 +79,7 @@ functions:
     handler: functions/quiz/getQuizById.handler
     events:
       - httpApi:
-          path: /quiz/{userId}/{quizId}
+          path: /quiz/{quizId}
           method: get
 
   deleteQuiz:
