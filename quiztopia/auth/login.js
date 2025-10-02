@@ -17,7 +17,7 @@ async function baseHandler(event) {
     }
     const params = new QueryCommand({
       TableName: process.env.DYNAMODB_TABLE,
-      IndexName: "EmailIndex", // lägg till i serverless.yml
+      IndexName: "EmailIndex",
       KeyConditionExpression: "email = :email",
       ExpressionAttributeValues: {
         ":email": { S: email },
@@ -45,7 +45,7 @@ async function baseHandler(event) {
 
     const token = jwt.sign(
       { userId: user.userId?.S ?? user.pk?.S, email: user.email.S },
-      process.env.JWT_SECRET, // du sa att du kör utan fallback, bra!
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
